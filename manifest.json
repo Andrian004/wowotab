@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "WowoTab Extension",
+  "name": "WowoTab - Theme for new tab",
   "version": "2.1",
-  "description": "A custom new tab page extension for Chrome",
+  "description": "A custom new tab for Chrome",
   "chrome_url_overrides": {
     "newtab": "newtab.html"
   },
