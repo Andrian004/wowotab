@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#03050b" />
+    <title>New tab</title>
+    <link rel="stylesheet" href="new.css" />
+  </head>
+
+  <body>
+    <!-- ================================================================
+         BACKGROUND
+         ================================================================ -->
+
+    <div class="bg-wrapper" aria-hidden="true">
+      <!-- Animated canvas background -->
+      <canvas id="network-bg"></canvas>
+
+      <!-- Decorative atmospheric layers -->
+      <div class="bg-glow bg-glow-purple"></div>
+      <div class="bg-glow bg-glow-cyan"></div>
+
+      <!-- CRT effects -->
+      <div class="scanline-overlay"></div>
+      <div class="vignette"></div>
+    </div>
+
+    <!-- ================================================================
+         MAIN DASHBOARD
+         ================================================================ -->
+
+    <main class="dashboard-ui">
+      <!-- BAGIAN ATAS: Greeting & Jam -->
+      <header class="top-header">
+        <div class="greeting-container">
+          <!-- Data-text digunakan nanti untuk efek animasi glitch text di CSS -->
+          <h1 id="greeting-text" class="glitch-title" data-text="Good Morning">
+            Good Morning
+          </h1>
+          <p id="date-display" class="date-text">Sunday, September 13</p>
+        </div>
+        <div class="clock-container">
+          <h2 id="time-display" class="digital-clock">09:49</h2>
+        </div>
+      </header>
+
+      <!-- BAGIAN TENGAH: Input Pencarian ala Terminal -->
+      <section class="search-section">
+        <div class="cyber-search-wrapper glow-border">
+          <div class="system-label">
+            <span>SYSTEM ACCESS: ENTER COMMAND OR URL</span>
+          </div>
+          <section class="info" id="info"></section>
+          <div class="input-container" style="position: relative">
+            <!-- Input untuk menampilkan bayangan suggestion -->
+            <input
+              type="text"
+              id="suggestion-input"
+              disabled
+              autocomplete="off"
+            />
+            <!-- Input asli tempat user mengetik -->
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Search Google or type a URL..."
+              autocomplete="off"
+              autofocus
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- BAGIAN BAWAH-TENGAH: Grid Menu Cepat -->
+      <section class="quick-access-section">
+        <div class="section-title">
+          <h3>Quick Access</h3>
+          <p class="cyber-subtitle">DATA PORTALS: RAPID ACCESS</p>
+        </div>
+
+        <div id="quick-nav" class="portals-grid">
+          <a href="https://github.com" class="cyber-card portal-name">
+            Github
+          </a>
+        </div>
+      </section>
+
+      <!-- BAGIAN BAWAH: Log & Konfigurasi -->
+      <footer class="bottom-footer">
+        <div class="system-logs">
+          <p id="dev-log" class="console-text">
+            DEV_LOG: SYSTEM_ACTIVE // USER: ADMIN
+          </p>
+          <p class="console-sub">New Tab for Dev</p>
+        </div>
+
+        <div class="config-gear-module">
+          <div class="rotating-gear-container">
+            <svg class="circular-text" viewBox="0 0 100 100">
+              <!-- Lingkaran path tak kasat mata untuk teks melingkar -->
+              <path
+                id="text-circle"
+                d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0"
+                fill="none"
+              />
+              <text>
+                <textPath href="#text-circle" startOffset="0%">
+                  CONFIG: [DEV][GLOBAL] - SYSTEM ADMIN -
+                </textPath>
+              </text>
+            </svg>
+            <div class="inner-gears">
+              <!-- Placeholder gir, akan diganti SVG detail di CSS/Tahap berikutnya -->
+              ⚙️
+            </div>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <!-- ================================================================
+         JAVASCRIPT
+         ================================================================ -->
+
+    <script src="new.js"></script>
+  </body>
+</html>

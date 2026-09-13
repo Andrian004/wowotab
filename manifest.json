@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "WowoTab Extension",
+  "version": "2.1",
+  "description": "A custom new tab page extension for Chrome",
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "permissions": ["activeTab", "storage"]
+}

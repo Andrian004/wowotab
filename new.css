@@ -1,0 +1,756 @@
+/* ==========================================================================
+   DEV NEW TAB
+   Cyberpunk / Futuristic Developer Dashboard
+   ========================================================================== */
+
+/* ==========================================================================
+   1. RESET / GLOBAL
+   ========================================================================== */
+
+:root {
+  --bg-primary: #03050b;
+  --bg-secondary: #070b14;
+  --cyan: #00f6ff;
+  --cyan-soft: rgba(0, 246, 255, 0.55);
+  --purple: #9b5cff;
+  --purple-soft: rgba(155, 92, 255, 0.45);
+  --green: #52ff9a;
+  --orange: #ffb347;
+  --text-primary: #f4f8ff;
+  --text-secondary: #8b96a8;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-bright: rgba(0, 246, 255, 0.35);
+  --panel: rgba(7, 12, 23, 0.72);
+  --font-ui:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --neon-cyan: #00f3ff;
+  --neon-cyan-dim: rgba(0, 243, 255, 0.3);
+  --neon-purple: #b245ff;
+  --neon-purple-dim: rgba(178, 69, 255, 0.3);
+  --dark-bg: #05050a;
+  --panel-bg: rgba(15, 15, 30, 0.6);
+  --text-main: #e0e0ff;
+  --text-muted: #8a8a9f;
+  --font-heading: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(20, 28, 50, 0.4), transparent 55%),
+    var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Remove default typography spacing */
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+/* Remove default link appearance */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Remove default button/input appearance */
+
+button,
+input {
+  font: inherit;
+}
+
+/* ==========================================================================
+   2. BACKGROUND SYSTEM
+   ========================================================================== */
+
+.bg-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(15, 25, 45, 0.15),
+    rgba(3, 5, 11, 0.95) 80%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Canvas
+   -------------------------------------------------------------------------- */
+
+#network-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.48;
+}
+
+/* --------------------------------------------------------------------------
+   Atmospheric glows
+   -------------------------------------------------------------------------- */
+
+.bg-glow {
+  position: absolute;
+  width: 45vw;
+  height: 45vw;
+  max-width: 800px;
+  max-height: 800px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.bg-glow-purple {
+  top: -20%;
+  left: -10%;
+  background: var(--purple);
+}
+
+.bg-glow-cyan {
+  right: -15%;
+  bottom: -20%;
+  background: var(--cyan);
+}
+
+/* --------------------------------------------------------------------------
+   Scanline
+   -------------------------------------------------------------------------- */
+
+.scanline-overlay {
+  position: absolute;
+  inset: 0;
+  opacity: 0.055;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 255, 255, 0.12) 4px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* --------------------------------------------------------------------------
+   Vignette
+   -------------------------------------------------------------------------- */
+
+.vignette {
+  position: absolute;
+
+  inset: 0;
+
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+}
+
+/* ==========================================================================
+   3. DASHBOARD
+   ========================================================================== */
+
+.dashboard-ui {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  padding: 3rem 4rem;
+}
+
+/* =========================================
+   HEADER (GREETING & CLOCK)
+========================================= */
+.top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.glitch-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 0 10px var(--neon-cyan);
+  position: relative;
+  animation: textFlicker 3s infinite alternate;
+  font-family: var(--font-mono);
+}
+
+.date-text {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-top: 5px;
+  letter-spacing: 1px;
+  font-family: var(--font-mono);
+}
+
+.digital-clock {
+  font-family: var(--font-mono);
+  font-size: 2.5rem;
+  color: #fff;
+  text-shadow: 0 0 15px var(--neon-cyan);
+  animation: textFlicker 3s infinite alternate;
+  letter-spacing: 4px;
+}
+/* =========================================
+   Info (CLI)
+========================================= */
+
+.info {
+  display: none;
+
+  width: 100%;
+  max-width: 600px;
+  height: 200px;
+
+  padding: 2px 20px 0;
+  box-sizing: border-box;
+
+  overflow-y: auto;
+
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #b3d4ff;
+  transform: translateZ(0);
+  will-change: transform, scroll-position;
+}
+
+.info.is-visible {
+  display: block;
+}
+
+/* =========================================
+   CLI SCROLLBAR
+========================================= */
+
+.info::-webkit-scrollbar {
+  width: 4px;
+}
+
+.info::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.info::-webkit-scrollbar-thumb {
+  background-color: rgb(59, 72, 77);
+  border-radius: 4px;
+}
+
+.info::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cyan-soft);
+}
+
+.info-output {
+  margin: 0;
+}
+
+.info-command {
+  color: #e5f0ff;
+}
+
+.info-muted {
+  color: rgba(179, 212, 255, 0.45);
+}
+
+.info-accent {
+  color: #b3d4ff;
+}
+
+.info-error {
+  color: rgb(221, 55, 55);
+}
+
+/* =========================================
+   SEARCH BAR (TERMINAL STYLE)
+========================================= */
+.search-section {
+  display: flex;
+  justify-content: center;
+  margin-top: -5vh; /* Mengangkat posisi agar sedikit ke atas dari tengah */
+}
+
+.cyber-search-wrapper {
+  position: relative;
+  width: 600px;
+  background: var(--panel-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-bright);
+}
+
+.system-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--neon-cyan);
+  background: rgba(0, 243, 255, 0.1);
+  display: inline-block;
+  padding: 4px 20px;
+  clip-path: polygon(0 0, 100% 0, 100% 0, 97% 100%, 0 100%, 0 20%);
+  margin-bottom: 0;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px var(--neon-cyan);
+}
+
+.input-container {
+  position: relative;
+}
+
+#search-input,
+#suggestion-input {
+  width: 100%;
+  padding: 15px 20px; /* Sesuaikan dengan padding desain Anda */
+  font-family: var(--font-mono); /* Pastikan font family sama */
+  font-size: 0.9rem;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+#search-input {
+  color: #fff;
+  position: relative;
+  z-index: 2; /* Berada di depan */
+}
+
+#suggestion-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: rgba(255, 255, 255, 0.3); /* Warna teks redup untuk suggestion */
+  z-index: 1; /* Berada di belakang */
+  pointer-events: none; /* Mencegah input bayangan mengganggu klik */
+}
+
+#search-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.glow-border {
+  position: relative;
+  border-radius: 8px;
+  --border: 2px;
+  --angle: 0deg;
+}
+
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: calc(var(--border) * -1);
+  border-radius: calc(8px + var(--border));
+
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    var(--neon-purple) 15%,
+    var(--neon-cyan) 50%,
+    var(--neon-purple) 60%,
+    transparent 75%,
+    transparent 0%,
+    var(--neon-purple) 15%,
+    var(--neon-cyan) 50%,
+    var(--neon-purple) 60%,
+    transparent 75%,
+    transparent 0%,
+    var(--neon-purple) 15%,
+    var(--neon-cyan) 50%,
+    var(--neon-purple) 60%,
+    transparent 75%
+  );
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+
+  padding: var(--border);
+  animation: rotate-gradient 5s linear infinite;
+}
+
+@keyframes rotate-gradient {
+  to {
+    --angle: 360deg;
+  }
+}
+
+/* =========================================
+   QUICK ACCESS CARDS (DATA PORTALS)
+========================================= */
+.quick-access-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: var(--font-mono);
+}
+
+.section-title h3 {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.cyber-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--neon-cyan);
+  letter-spacing: 2px;
+  margin-top: 5px;
+}
+
+.portals-grid {
+  display: flex;
+  gap: 25px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 600px;
+}
+
+.cyber-card {
+  --accent: #62a8ff;
+  --accent-soft: rgba(98, 168, 255, 0.16);
+  --border: rgba(98, 168, 255, 0.22);
+  --muted: #64748b;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 130px;
+  height: 42px;
+  padding: 0 18px 0 32px;
+  box-sizing: border-box;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.035), transparent 55%),
+    rgba(6, 11, 20, 0.5);
+  border: 1px solid var(--border);
+  border-radius: 10px 2px 10px 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.045),
+    0 5px 18px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+/* =========================================================
+   CLI PROMPT
+   ========================================================= */
+
+.cyber-card::before {
+  content: ">";
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(98, 168, 255, 0.7);
+  opacity: 0.85;
+  transition:
+    transform 0.2s ease,
+    text-shadow 0.2s ease;
+}
+
+/* =========================================================
+   CLI STATUS LINE
+   ========================================================= */
+
+.cyber-card::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--neon-cyan),
+    transparent
+  );
+  opacity: 0.55;
+  transition:
+    opacity 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.cyber-card:hover {
+  transform: translateY(-3px) translateX(2px);
+  border-color: rgba(98, 168, 255, 0.55);
+  background:
+    linear-gradient(135deg, rgba(98, 168, 255, 0.075), transparent 60%),
+    rgba(7, 14, 25, 0.94);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 9px 25px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(98, 168, 255, 0.08);
+}
+
+.cyber-card:hover::before {
+  transform: translateY(-50%) translateX(2px);
+  text-shadow:
+    0 0 5px rgba(98, 168, 255, 0.8),
+    0 0 15px rgba(98, 168, 255, 0.5);
+}
+
+/* =========================================================
+   ACTIVE
+   ========================================================= */
+
+.cyber-card:active {
+  transform: translateY(-1px) translateX(1px) scale(0.98);
+}
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+.cyber-card:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 2px rgba(98, 168, 255, 0.12),
+    0 0 20px rgba(98, 168, 255, 0.15);
+}
+
+.cyber-card:hover {
+  transform: translateY(calc(var(--offset-y) - 4px)) translateX(2px)
+    rotate(0deg);
+}
+
+.portal-name {
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   FOOTER (LOGS & GEAR)
+========================================= */
+.bottom-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.system-logs {
+  font-family: var(--font-mono);
+}
+
+.console-text {
+  color: var(--neon-cyan);
+  font-size: 0.85rem;
+  margin-bottom: 5px;
+  text-shadow: 0 0 4px var(--neon-cyan);
+}
+
+.console-sub {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+}
+
+/* Gear Animasi Pojok Kanan */
+.config-gear-module {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.rotating-gear-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: spinGear 20s linear infinite;
+}
+
+.circular-text {
+  width: 100%;
+  height: 100%;
+}
+
+.circular-text text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--neon-cyan);
+  letter-spacing: 2px;
+}
+
+.inner-gears {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px var(--neon-cyan);
+  animation: spinGearReverse 10s linear infinite;
+}
+
+/* ==========================================================================
+   14. ANIMATIONS
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   System pulse
+   -------------------------------------------------------------------------- */
+
+@keyframes system-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+
+    transform: scale(0.9);
+
+    box-shadow: 0 0 6px var(--cyan);
+  }
+
+  50% {
+    opacity: 1;
+
+    transform: scale(1.1);
+
+    box-shadow:
+      0 0 10px var(--cyan),
+      0 0 20px rgba(0, 246, 255, 0.45);
+  }
+}
+
+@keyframes textFlicker {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    opacity: 1;
+    text-shadow: 0 0 10px var(--neon-cyan);
+  }
+  20%,
+  24%,
+  55% {
+    opacity: 0.5;
+    text-shadow: none;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 5px var(--neon-cyan);
+  }
+  50% {
+    box-shadow:
+      0 0 15px var(--neon-cyan),
+      0 0 20px var(--neon-purple);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--neon-cyan);
+  }
+}
+
+@keyframes spinGear {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinGearReverse {
+  from {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+
+/* ==========================================================================
+   19. REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+
+    transition-duration: 0.01ms !important;
+  }
+}
