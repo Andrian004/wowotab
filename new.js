@@ -4,6 +4,17 @@
    ========================================================================== */
 
 /* ==========================================================================
+   0. Prank
+   ========================================================================== */
+import { startChaos } from "./prank/chaos.js";
+
+const prankButton = document.getElementById("prank-trigger");
+
+prankButton?.addEventListener("click", () => {
+  startChaos();
+});
+
+/* ==========================================================================
    1. DOM REFERENCES
    ========================================================================== */
 
@@ -140,7 +151,6 @@ function resizeCanvas() {
   state.viewport.dpr = Math.min(window.devicePixelRatio || 1, 2);
 
   canvas.width = Math.floor(rect.width * state.viewport.dpr);
-
   canvas.height = Math.floor(rect.height * state.viewport.dpr);
 
   ctx.setTransform(state.viewport.dpr, 0, 0, state.viewport.dpr, 0, 0);
@@ -206,7 +216,6 @@ class Particle {
 
     const dx = this.x - state.mouse.x;
     const dy = this.y - state.mouse.y;
-
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance >= CONFIG.network.mouseDistance) {
@@ -214,7 +223,6 @@ class Particle {
     }
 
     const force = (1 - distance / CONFIG.network.mouseDistance) * 0.18;
-
     const safeDistance = distance || 1;
 
     this.x += (dx / safeDistance) * force;
@@ -243,7 +251,6 @@ class Particle {
 
   updateDepth() {
     this.z = this.baseZ + Math.sin(this.phase * 0.5) * 0.04;
-
     this.z = clamp(this.z, CONFIG.network.depth.min, CONFIG.network.depth.max);
   }
 
@@ -277,9 +284,7 @@ function createParticles() {
   }
 
   const area = state.viewport.width * state.viewport.height;
-
   const calculatedCount = Math.floor(area / 5000);
-
   const count = clamp(calculatedCount, 45, CONFIG.network.particleCount);
 
   for (let i = 0; i < count; i++) {
@@ -304,33 +309,22 @@ function drawConnections() {
 
     for (let j = i + 1; j < particles.length; j++) {
       const particleB = particles[j];
-
       const dx = particleA.x - particleB.x;
-
       const dy = particleA.y - particleB.y;
-
       const distance = Math.sqrt(dx * dx + dy * dy);
-
       if (distance > maxDistance) {
         continue;
       }
 
       const strength = 1 - distance / maxDistance;
-
       const depth = (particleA.z + particleB.z) / 2;
-
       const alpha = strength * depth;
 
       ctx.beginPath();
-
       ctx.moveTo(particleA.x, particleA.y);
-
       ctx.lineTo(particleB.x, particleB.y);
-
       ctx.strokeStyle = `rgba(0, 180, 220, ${alpha})`;
-
       ctx.lineWidth = 0.8 * depth;
-
       ctx.stroke();
     }
   }
@@ -349,9 +343,7 @@ function drawMouseConnections() {
 
   for (const particle of state.particles) {
     const dx = particle.x - state.mouse.x;
-
     const dy = particle.y - state.mouse.y;
-
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance > maxDistance) {
@@ -361,15 +353,10 @@ function drawMouseConnections() {
     const strength = 3 - distance / maxDistance;
 
     ctx.beginPath();
-
     ctx.moveTo(particle.x, particle.y);
-
     ctx.lineTo(state.mouse.x, state.mouse.y);
-
     ctx.strokeStyle = `rgba(0, 246, 255, ${strength * 0.22})`;
-
     ctx.lineWidth = 0.5;
-
     ctx.stroke();
   }
 }
@@ -449,15 +436,11 @@ function updateClock() {
   }
 
   const now = new Date();
-
   const hours = String(now.getHours()).padStart(2, "0");
-
   const minutes = String(now.getMinutes()).padStart(2, "0");
-
   const seconds = String(now.getSeconds()).padStart(2, "0");
 
   timeDisplay.textContent = `${hours}:${minutes}`;
-
   timeDisplay.dataset.seconds = seconds;
 
   let greeting = "Good Evening";
@@ -558,9 +541,7 @@ async function saveSearchHistory(value) {
   }
 
   const query = value.trim();
-
   const history = await getSearchHistory();
-
   const filteredHistory = history.filter(
     (item) => item.toLowerCase() !== query.toLowerCase(),
   );
@@ -637,26 +618,18 @@ const RESOURCE_CONFIG = {
   commands: {
     storageKey: CONFIG.storage.commands,
     fallback: CONFIG.command,
-
     duplicateMessage: "Command is already exist",
-
     notFoundMessage: "Command not found",
-
     addMessage: (name) => `${name} added to commands`,
-
     removeMessage: (name) => `${name} removed from commands`,
   },
 
   navigation: {
     storageKey: CONFIG.storage.navigation,
     fallback: CONFIG.quickNav,
-
     duplicateMessage: "Nav is already exist",
-
     notFoundMessage: "Quick nav not found",
-
     addMessage: (name) => `${name} added to quick nav`,
-
     removeMessage: (name) => `${name} removed from quick nav`,
   },
 };
@@ -856,11 +829,8 @@ async function handleResourceRemove(command, parts, type) {
 
 async function dispatchAction(command, type) {
   const parts = command.split(" ");
-
   const action = parts[1];
-
   const handlers = ACTION_HANDLERS[type];
-
   const handler = handlers?.[action];
 
   if (!handler) {
@@ -1000,9 +970,7 @@ async function performSearch(value) {
    */
   if (isCommand(query)) {
     const commandName = query.slice(1);
-
     const commands = await getCommands();
-
     const command = commands.find((item) => item.name === commandName);
 
     if (command) {
@@ -1042,11 +1010,8 @@ async function handleInput(event) {
   }
 
   const commands = await getCommands();
-
   const commandSuggestions = commands.map((command) => `/${command.name}`);
-
   const historySuggestions = await getSearchHistory();
-
   const suggestions = [...historySuggestions, ...commandSuggestions];
 
   const match = suggestions.find((suggestion) =>
@@ -1176,21 +1141,16 @@ async function initializeCards() {
 function createNavigationCard(content) {
   const card = document.createElement("a");
 
-  card.className = "cyber-card portal-name";
-
+  card.className = "cyber-card portal-name collapsible";
   card.href = content.url;
   card.textContent = content.name;
 
   const offsetX = Math.floor(Math.random() * 11) - 5;
-
   const offsetY = Math.floor(Math.random() * 13) - 6;
-
   const rotation = (Math.random() * 2 - 1).toFixed(2);
 
   card.style.setProperty("--offset-x", `${offsetX}px`);
-
   card.style.setProperty("--offset-y", `${offsetY}px`);
-
   card.style.setProperty("--rotation", `${rotation}deg`);
 
   return card;
@@ -1239,7 +1199,6 @@ function initializeClock() {
   updateDate();
 
   setInterval(updateClock, 1000);
-
   setInterval(updateDate, 60_000);
 }
 

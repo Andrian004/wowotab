@@ -35,19 +35,25 @@
       <header class="top-header">
         <div class="greeting-container">
           <!-- Data-text digunakan nanti untuk efek animasi glitch text di CSS -->
-          <h1 id="greeting-text" class="glitch-title" data-text="Good Morning">
+          <h1
+            id="greeting-text"
+            class="glitch-title collapsible"
+            data-text="Good Morning"
+          >
             Good Morning
           </h1>
-          <p id="date-display" class="date-text">Sunday, September 13</p>
+          <p id="date-display" class="date-text collapsible">
+            Sunday, September 13
+          </p>
         </div>
         <div class="clock-container">
-          <h2 id="time-display" class="digital-clock">09:49</h2>
+          <h2 id="time-display" class="digital-clock collapsible">09:49</h2>
         </div>
       </header>
 
       <!-- BAGIAN TENGAH: Input Pencarian ala Terminal -->
       <section class="search-section">
-        <div class="cyber-search-wrapper glow-border">
+        <div class="cyber-search-wrapper glow-border collapsible">
           <div class="system-label">
             <span>SYSTEM ACCESS: ENTER COMMAND OR URL</span>
           </div>
@@ -75,8 +81,8 @@
       <!-- BAGIAN BAWAH-TENGAH: Grid Menu Cepat -->
       <section class="quick-access-section">
         <div class="section-title">
-          <h3>Quick Access</h3>
-          <p class="cyber-subtitle">DATA PORTALS: RAPID ACCESS</p>
+          <h3 class="collapsible">Quick Access</h3>
+          <p class="cyber-subtitle collapsible">DATA PORTALS: RAPID ACCESS</p>
         </div>
 
         <div id="quick-nav" class="portals-grid">
@@ -106,14 +112,12 @@
               />
               <text>
                 <textPath href="#text-circle" startOffset="0%">
-                  CONFIG: [DEV][GLOBAL] - SYSTEM ADMIN -
+                  <!-- CONFIG: [DEV][GLOBAL] - SYSTEM ADMIN - -->
+                  DON'T CLICK - THE BUTTON !!!
                 </textPath>
               </text>
             </svg>
-            <div class="inner-gears">
-              <!-- Placeholder gir, akan diganti SVG detail di CSS/Tahap berikutnya -->
-              ⚙️
-            </div>
+            <button class="inner-gears" id="prank-trigger">🔞</button>
           </div>
         </div>
       </footer>
@@ -123,6 +127,6 @@
          JAVASCRIPT
          ================================================================ -->
 
-    <script src="new.js"></script>
+    <script type="module" src="new.js"></script>
   </body>
 </html>
