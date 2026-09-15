@@ -6,13 +6,95 @@
 /* ==========================================================================
    0. Prank
    ========================================================================== */
-import { startChaos } from "./prank/chaos.js";
+import { startChaos, stopChaos } from "./prank/chaos.js";
 
 const prankButton = document.getElementById("prank-trigger");
+const recoveryButton = document.getElementById("repair-system");
 
-prankButton?.addEventListener("click", () => {
+import {
+  showBSOD,
+  isPrankActive,
+  activatePrank,
+  deactivatePrank,
+} from "./prank/bsod.js";
+let prankTimer = null;
+let prankStarted = false;
+
+async function initPrank() {
+  const prankButton = document.getElementById("prank-trigger");
+  const repairButton = document.getElementById("repair-system");
+  /* * Prank trigger */
+  prankButton?.addEventListener("click", startPrank);
+  /* * Repair trigger */
+  repairButton?.addEventListener("click", repairPrank);
+  /* * Check persistent state */
+  const active = await isPrankActive();
+  if (active) {
+    restorePrankState();
+  }
+}
+
+/* ========================================================================== 
+START PRANK 
+========================================================================== */
+async function startPrank() {
+  if (prankStarted) {
+    return;
+  }
+  prankStarted = true;
+  /* * Persist state immediately. * * Bahkan jika user menutup tab saat chaos * berlangsung, prank tetap dianggap aktif. */
+  await activatePrank();
+  /* * Disable trigger */
+  const button = document.getElementById("prank-trigger");
+  if (button) {
+    button.disabled = true;
+  }
+  /* * Start chaos */
   startChaos();
-});
+  /* * Wait 10 seconds */
+  prankTimer = setTimeout(() => {
+    showBSOD();
+    prankTimer = null;
+  }, 10000);
+}
+
+/* ========================================================================== 
+REPAIR PRANK 
+========================================================================== */
+async function repairPrank() {
+  /* * Stop pending timer */
+  if (prankTimer) {
+    clearTimeout(prankTimer);
+    prankTimer = null;
+  }
+  /* * Remove persistent state */
+  await deactivatePrank();
+  /* * Stop physics */
+  stopChaos();
+  /* * Hide BSOD */
+  hideBSOD();
+  /* * Allow prank button again */
+  const button = document.getElementById("prank-trigger");
+  if (button) {
+    button.disabled = false;
+  }
+  /* * Reset controller */ prankStarted = false;
+}
+
+/* ========================================================================== 
+RESTORE PERSISTENT STATE 
+========================================================================== */
+
+function restorePrankState() {
+  prankStarted = true;
+  /* * Disable prank button */
+  const button = document.getElementById("prank-trigger");
+  if (button) {
+    button.disabled = true;
+  }
+  /* * IMPORTANT: * * Kita tidak menjalankan chaos lagi. * * Jika user membuka New Tab baru, * langsung tampilkan BSOD. */
+  showBSOD();
+}
 
 /* ==========================================================================
    1. DOM REFERENCES
@@ -1214,6 +1296,7 @@ function initializeNetwork() {
 }
 
 async function initialize() {
+  await initPrank();
   initializeClock();
   initializeNetwork();
   initializeSearch();

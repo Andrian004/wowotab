@@ -123,6 +123,92 @@
       </footer>
     </main>
 
+    <!-- ==========================================================================
+     FAKE BSOD
+     ========================================================================== -->
+
+    <div id="bsod" class="bsod">
+      <!-- -----------------------------------------------------------------------
+       BSOD SCREEN
+       ----------------------------------------------------------------------- -->
+
+      <div id="bsod-screen" class="bsod-screen">
+        <div class="bsod-content">
+          <div class="bsod-face">:(</div>
+
+          <div class="bsod-title">
+            Your browser ran into a problem and needs to restart.
+          </div>
+
+          <div class="bsod-description">
+            We're just collecting some error info, and then we'll restart for
+            you.
+          </div>
+
+          <div class="bsod-progress">
+            <span id="bsod-progress-value">0</span>% complete
+          </div>
+
+          <div class="bsod-details">
+            <div>
+              For more information about this issue and possible fixes, visit
+            </div>
+
+            <div>https://www.google.com</div>
+
+            <br />
+
+            <div>
+              Stop code:
+              <strong>CRITICAL_PROCESS_DIED</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- -----------------------------------------------------------------------
+       RECOVERY SCREEN
+       ----------------------------------------------------------------------- -->
+
+      <div id="recovery-screen" class="recovery-screen">
+        <div class="recovery-content">
+          <div class="recovery-title">Automatic Repair</div>
+
+          <div class="recovery-subtitle">
+            Your browser did not start correctly.
+          </div>
+
+          <div class="recovery-description">
+            Page couldn't load correctly. The system encountered an unexpected
+            problem and requires recovery.
+          </div>
+
+          <!-- -------------------------------------------------------------------
+           DIAGNOSTIC
+           ------------------------------------------------------------------- -->
+
+          <div class="recovery-status">
+            <div id="recovery-status-text">Diagnosing your browser...</div>
+
+            <div class="recovery-progress">
+              <div
+                id="recovery-progress-bar"
+                class="recovery-progress-bar"
+              ></div>
+            </div>
+          </div>
+
+          <!-- -------------------------------------------------------------------
+           ACTION
+           ------------------------------------------------------------------- -->
+
+          <button id="repair-system" class="repair-button" type="button">
+            REPAIR SYSTEM
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- ================================================================
          JAVASCRIPT
          ================================================================ -->
