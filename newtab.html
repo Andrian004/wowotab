@@ -201,12 +201,198 @@
           <!-- -------------------------------------------------------------------
            ACTION
            ------------------------------------------------------------------- -->
-
-          <button id="repair-system" class="repair-button" type="button">
-            REPAIR SYSTEM
-          </button>
+          <div class="repair-wrapper">
+            <button id="repair-system" class="repair-button" type="button">
+              REPAIR SYSTEM
+            </button>
+            <button id="secret-docs" class="repair-button" type="button">
+              DON'T CLICK THIS
+            </button>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- ==========================================================================
+     SECRET GATE
+     ========================================================================== -->
+
+    <div id="secret-gate" class="secret-overlay">
+      <div class="secret-panel">
+        <div class="secret-label">CLASSIFIED</div>
+
+        <h1>You found the secret.</h1>
+
+        <p>Unfortunately, this area requires authorization.</p>
+
+        <form id="secret-form">
+          <label for="secret-password"> Enter password </label>
+
+          <input
+            id="secret-password"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="password..."
+          />
+
+          <button type="submit" class="repair-button">UNLOCK</button>
+        </form>
+
+        <div id="secret-error" class="secret-error"></div>
+
+        <!-- -----------------------------------------------------------------------
+         HINT
+         ----------------------------------------------------------------------- -->
+
+        <div class="secret-hint">
+          <div class="hint-title">NEED A HINT?</div>
+
+          <div class="hint-text">You don't need to debug this one.</div>
+
+          <div class="hint-text">
+            Think back to the first program you ever wrote.
+          </div>
+
+          <div class="hint-text">
+            Before loops. Before functions. Before frameworks.
+          </div>
+
+          <div class="hint-text">
+            Two words were enough to prove that your code worked.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+     SECRET DOCUMENTATION
+     ========================================================================== -->
+
+    <div id="secret-docs-page" class="secret-docs-page">
+      <header class="secret-docs-header">
+        <div>
+          <div class="secret-docs-kicker">CLASSIFIED DOCUMENTATION</div>
+
+          <h1>Search Bar // Hidden Capabilities</h1>
+        </div>
+      </header>
+
+      <main class="secret-docs-content">
+        <section class="docs-section">
+          <h2>Search is not just search.</h2>
+
+          <p>
+            The search bar can do more than simply search the web. Certain
+            commands can control parts of this New Tab environment.
+          </p>
+        </section>
+
+        <!-- -----------------------------------------------------------------------
+         GOOGLE
+         ----------------------------------------------------------------------- -->
+
+        <section class="docs-section">
+          <h2>01 — Search</h2>
+
+          <p>
+            Enter a normal phrase and the New Tab will perform a regular web
+            search.
+          </p>
+
+          <code> javascript tutorial </code>
+        </section>
+
+        <!-- -----------------------------------------------------------------------
+         COMMANDS
+         ----------------------------------------------------------------------- -->
+
+        <section class="docs-section">
+          <h2>02 — Commands</h2>
+
+          <p>Commands begin with a forward slash.</p>
+
+          <div class="command-card">
+            <code>/config</code>
+            <span>Open configuration mode.</span>
+          </div>
+
+          <p>You can create your own commands by executing these commands:</p>
+
+          <div class="command-card">
+            <code>cmd ls &lt;name&gt;</code>
+            <span>List all existing commands.</span>
+          </div>
+
+          <div class="command-card">
+            <code>cmd add -n &lt;name&gt; -u &lt;url&gt;</code>
+            <span>Add a new command.</span>
+          </div>
+
+          <div class="command-card">
+            <code>cmd remove -n &lt;name&gt;</code>
+            <span>Remove an existing command.</span>
+          </div>
+        </section>
+
+        <!-- -----------------------------------------------------------------------
+         CONFIG
+         ----------------------------------------------------------------------- -->
+
+        <section class="docs-section">
+          <h2>03 — Configuration</h2>
+
+          <p>Type the following into the search bar:</p>
+
+          <code> /config </code>
+
+          <p>
+            Configuration options will become available directly inside the New
+            Tab interface.
+          </p>
+        </section>
+
+        <!-- -----------------------------------------------------------------------
+         CLEAR SEARCH BAR
+         ----------------------------------------------------------------------- -->
+
+        <section class="docs-section">
+          <h2>04 — Clear Search Bar</h2>
+
+          <p>Type the following into the search bar:</p>
+
+          <code> clear </code>
+
+          <p>You can use the 'cls' instead of 'clear'.</p>
+        </section>
+
+        <!-- -----------------------------------------------------------------------
+         REPAIR
+         ----------------------------------------------------------------------- -->
+
+        <section class="docs-section">
+          <h2>05 — Emergency Repair</h2>
+
+          <p>
+            Somehow you managed to break the entire interface. Don't worry. This
+            button restores the New Tab interface to its original state.
+          </p>
+
+          <button id="secret-repair" class="repair-button" type="button">
+            REPAIR SYSTEM
+          </button>
+        </section>
+
+        <!-- -----------------------------------------------------------------------
+         FOOTER
+         ----------------------------------------------------------------------- -->
+
+        <footer class="secret-docs-footer">
+          <span> CLASSIFICATION: SECRET </span>
+
+          <span> STATUS: UNLOCKED </span>
+        </footer>
+      </main>
     </div>
 
     <!-- ================================================================

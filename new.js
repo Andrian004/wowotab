@@ -7,15 +7,17 @@
    0. Prank
    ========================================================================== */
 import { startChaos, stopChaos } from "./prank/chaos.js";
+import { initSecretButton } from "./prank/secret.js";
 
-const prankButton = document.getElementById("prank-trigger");
-const recoveryButton = document.getElementById("repair-system");
+// const prankButton = document.getElementById("prank-trigger");
+// const recoveryButton = document.getElementById("repair-system");
 
 import {
   showBSOD,
   isPrankActive,
   activatePrank,
   deactivatePrank,
+  repairSystem,
 } from "./prank/bsod.js";
 let prankTimer = null;
 let prankStarted = false;
@@ -23,10 +25,13 @@ let prankStarted = false;
 async function initPrank() {
   const prankButton = document.getElementById("prank-trigger");
   const repairButton = document.getElementById("repair-system");
+  const secretRepair = document.getElementById("secret-repair");
+
   /* * Prank trigger */
   prankButton?.addEventListener("click", startPrank);
   /* * Repair trigger */
   repairButton?.addEventListener("click", repairPrank);
+  secretRepair?.addEventListener("click", repairPrank);
   /* * Check persistent state */
   const active = await isPrankActive();
   if (active) {
@@ -55,7 +60,7 @@ async function startPrank() {
   prankTimer = setTimeout(() => {
     showBSOD();
     prankTimer = null;
-  }, 10000);
+  }, 6000);
 }
 
 /* ========================================================================== 
@@ -71,14 +76,20 @@ async function repairPrank() {
   await deactivatePrank();
   /* * Stop physics */
   stopChaos();
+
   /* * Hide BSOD */
-  hideBSOD();
+  repairSystem();
+
+  document.getElementById("secret-docs-page")?.classList.remove("active");
+  document.getElementById("secret-gate")?.classList.remove("active");
+
   /* * Allow prank button again */
   const button = document.getElementById("prank-trigger");
   if (button) {
     button.disabled = false;
   }
-  /* * Reset controller */ prankStarted = false;
+  /* * Reset controller */
+  prankStarted = false;
 }
 
 /* ========================================================================== 
@@ -1305,6 +1316,7 @@ async function initialize() {
 
   initializeWindowEvents();
   initializeTyping();
+  initSecretButton();
 }
 
 /* ==========================================================================

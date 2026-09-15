@@ -918,19 +918,12 @@ input {
 
 .repair-button {
   padding: 13px 24px;
-
   border: 1px solid #666666;
-
-  background: transparent;
-
+  background: #111111;
   color: #ffffff;
-
   font-family: inherit;
-
   font-size: 14px;
-
   cursor: pointer;
-
   transition:
     background 0.2s ease,
     border-color 0.2s ease;
@@ -944,6 +937,384 @@ input {
 
 .repair-button:active {
   transform: translateY(1px);
+}
+
+/* ==========================================================================
+   REPAIR WRAPPER
+   ========================================================================== */
+
+.repair-wrapper {
+  display: flex;
+  gap: 12px;
+}
+
+/* ==========================================================================
+   SECRET BUTTON
+   ========================================================================== */
+
+#secret-docs {
+  position: relative;
+
+  transition:
+    transform 0.18s ease,
+    opacity 0.2s ease;
+}
+
+/* ==========================================================================
+   SURRENDER
+   ========================================================================== */
+
+#secret-docs.secret-surrender {
+  animation: secret-surrender 0.4s ease;
+
+  border-color: #ffffff;
+
+  opacity: 0.9;
+}
+
+@keyframes secret-surrender {
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(0.92);
+  }
+
+  70% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================================
+   SECRET OVERLAY
+   ========================================================================== */
+
+.secret-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000000;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(3, 5, 11, 0.97);
+
+  color: #ffffff;
+}
+
+.secret-overlay.active {
+  display: flex;
+}
+
+/* ==========================================================================
+   PANEL
+   ========================================================================== */
+
+.secret-panel {
+  width: min(520px, 90vw);
+
+  padding: 40px;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  background: rgba(10, 14, 25, 0.95);
+
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   LABEL
+   ========================================================================== */
+
+.secret-label {
+  margin-bottom: 15px;
+
+  font-family: var(--font-mono);
+
+  font-size: 12px;
+
+  letter-spacing: 0.25em;
+
+  opacity: 0.5;
+}
+
+.secret-panel h1 {
+  margin: 0 0 15px;
+
+  font-size: 28px;
+}
+
+.secret-panel p {
+  margin-bottom: 30px;
+
+  color: #999;
+
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   FORM
+   ========================================================================== */
+
+#secret-form {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+#secret-form label {
+  font-family: var(--font-mono);
+
+  font-size: 13px;
+}
+
+#secret-password {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 13px 15px;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  outline: none;
+
+  background: #05070d;
+
+  color: #ffffff;
+
+  font-family: var(--font-mono);
+}
+
+#secret-password:focus {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================================================
+   ERROR
+   ========================================================================== */
+
+.secret-error {
+  min-height: 20px;
+
+  margin-top: 12px;
+
+  font-family: var(--font-mono);
+
+  font-size: 12px;
+
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   HINT
+   ========================================================================== */
+
+.secret-hint {
+  margin-top: 35px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hint-title {
+  margin-bottom: 10px;
+
+  font-family: var(--font-mono);
+
+  font-size: 11px;
+
+  letter-spacing: 0.2em;
+
+  opacity: 0.5;
+}
+
+.hint-text {
+  margin-top: 5px;
+
+  color: #999;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   SECRET DOCUMENTATION
+   ========================================================================== */
+
+.secret-docs-page {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000001;
+
+  display: none;
+
+  overflow-y: auto;
+
+  background: #03050b;
+
+  color: #eeeeee;
+
+  font-family: var(--font-mono), monospace;
+}
+
+.secret-docs-page.active {
+  display: block;
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.secret-docs-header {
+  padding: 50px 7vw;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.secret-docs-kicker {
+  margin-bottom: 12px;
+
+  font-size: 11px;
+
+  letter-spacing: 0.25em;
+
+  opacity: 0.4;
+}
+
+.secret-docs-header h1 {
+  margin: 0;
+
+  font-family: var(--font-mono), monospace;
+
+  font-size: clamp(24px, 4vw, 44px);
+
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+.secret-docs-content {
+  width: min(850px, 86vw);
+
+  margin: 0 auto;
+
+  padding: 60px 0 100px;
+}
+
+/* ==========================================================================
+   SECTION
+   ========================================================================== */
+
+.docs-section {
+  margin-bottom: 70px;
+}
+
+.docs-section h2 {
+  margin-bottom: 18px;
+
+  font-size: 20px;
+
+  font-weight: 500;
+}
+
+.docs-section p {
+  max-width: 700px;
+
+  color: #999;
+
+  font-family: var(--font-mono), monospace;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+}
+
+/* ==========================================================================
+   CODE
+   ========================================================================== */
+
+.docs-section > code {
+  display: inline-block;
+
+  margin: 10px 0;
+
+  padding: 10px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  background: #080b12;
+
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   COMMAND CARD
+   ========================================================================== */
+
+.command-card {
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+
+  margin-top: 10px;
+
+  padding: 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: #080b12;
+}
+
+.command-card code {
+  min-width: 100px;
+}
+
+.command-card span {
+  color: #888;
+
+  font-size: 13px;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.secret-docs-footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  padding-top: 30px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+
+  color: #555;
+
+  font-size: 10px;
+
+  letter-spacing: 0.15em;
 }
 
 /* ==========================================================================

@@ -50,8 +50,6 @@ const recoveryStatus = document.getElementById("recovery-status-text");
 
 const recoveryProgressBar = document.getElementById("recovery-progress-bar");
 
-const repairButton = document.getElementById("repair-system");
-
 let progressTimer = null;
 let recoveryTimer = null;
 
@@ -228,8 +226,6 @@ export function repairSystem() {
 /* ==========================================================================
    EVENT
    ========================================================================== */
-
-repairButton?.addEventListener("click", repairSystem);
 
 /* ==========================================================================
    STOP PROGRESS
