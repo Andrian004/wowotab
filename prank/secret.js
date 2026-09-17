@@ -159,7 +159,7 @@ secretForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const password = secretPassword.value.trim().toLowerCase();
 
-  if (password === SECRET_PASSWORD) {
+  if (password.toLowerCase() === SECRET_PASSWORD) {
     openSecretDocs();
     return;
   }

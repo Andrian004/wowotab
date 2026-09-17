@@ -317,10 +317,12 @@
             <span>Open configuration mode.</span>
           </div>
 
-          <p>You can create your own commands by executing these commands:</p>
+          <p>
+            You can create and manage your own commands in configuration mode:
+          </p>
 
           <div class="command-card">
-            <code>cmd ls &lt;name&gt;</code>
+            <code>cmd ls</code>
             <span>List all existing commands.</span>
           </div>
 
@@ -353,17 +355,59 @@
         </section>
 
         <!-- -----------------------------------------------------------------------
+          QUICK NAV
+         ----------------------------------------------------------------------- -->
+
+        <section class="docs-section">
+          <h2>04 — Quick Navigation</h2>
+
+          <p>
+            Quick Navigation is a list of link buttons displayed below the
+            search bar. It allows you to quickly access your favorite websites.
+          </p>
+
+          <p>
+            You can create and manage your own navigation links in configuration
+            mode:
+          </p>
+
+          <div class="command-card">
+            <code>nav add -n &lt;name&gt; -u &lt;url&gt;</code>
+            <span>Add a new navigation link.</span>
+          </div>
+
+          <div class="command-card">
+            <code>nav remove -n &lt;name&gt;</code>
+            <span>Remove an existing navigation link.</span>
+          </div>
+
+          <p>Names containing spaces must be wrapped in double quotes.</p>
+
+          <div class="command-card">
+            <code>nav add -n "My App" -u https://myapp.com</code>
+            <span>Add a navigation link with a name containing spaces.</span>
+          </div>
+
+          <p>Quotes are optional when the value does not contain spaces.</p>
+
+          <div class="command-card">
+            <code>nav add -n my-app -u https://myapp.com</code>
+            <span>Add a navigation link using a name without spaces.</span>
+          </div>
+        </section>
+
+        <!-- -----------------------------------------------------------------------
          CLEAR SEARCH BAR
          ----------------------------------------------------------------------- -->
 
         <section class="docs-section">
-          <h2>04 — Clear Search Bar</h2>
+          <h2>05 — Clear Search Bar</h2>
 
           <p>Type the following into the search bar:</p>
 
           <code> clear </code>
 
-          <p>You can use the 'cls' instead of 'clear'.</p>
+          <p>You can use 'cls' instead of 'clear'.</p>
         </section>
 
         <!-- -----------------------------------------------------------------------
@@ -371,7 +415,7 @@
          ----------------------------------------------------------------------- -->
 
         <section class="docs-section">
-          <h2>05 — Emergency Repair</h2>
+          <h2>06 — Emergency Repair</h2>
 
           <p>
             Somehow you managed to break the entire interface. Don't worry. This

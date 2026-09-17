@@ -799,6 +799,10 @@ async function removeResource(config, resources, data) {
    20. COMMAND ARGUMENT PARSER
    ========================================================================== */
 
+function hasWhitespace(value) {
+  return /\s/.test(value);
+}
+
 function parseAddArguments(parts) {
   if (
     parts[2] !== "-n" ||
@@ -889,6 +893,11 @@ async function listResource(command, type) {
 }
 
 async function handleResourceAdd(command, parts, type) {
+  if (type === "commands" && hasWhitespace(parts[3])) {
+    showCommandError(command, "Name can not have a whitespace. Run /config");
+    return;
+  }
+
   const data = parseAddArguments(parts);
 
   if (!data) {
@@ -903,6 +912,11 @@ async function handleResourceAdd(command, parts, type) {
 }
 
 async function handleResourceRemove(command, parts, type) {
+  if (type === "commands" && hasWhitespace(parts[3])) {
+    showCommandError(command, "Name can not have a whitespace. Run /config");
+    return;
+  }
+
   const data = parseRemoveArguments(parts);
 
   if (!data) {
@@ -919,9 +933,22 @@ async function handleResourceRemove(command, parts, type) {
 /* ==========================================================================
    23. GENERIC ACTION DISPATCHER
    ========================================================================== */
+function parseCommand(command) {
+  return (
+    command.match(/"([^"]*)"|[^\s]+/g)?.map((part) => {
+      if (part.startsWith('"') && part.endsWith('"')) {
+        return part.slice(1, -1);
+      }
+
+      return part;
+    }) ?? []
+  );
+}
 
 async function dispatchAction(command, type) {
-  const parts = command.split(" ");
+  // support for command: `nav add -n "My App" -u "https://myapp.com"
+  // or `nav add -n my-app -u https://myapp.com
+  const parts = parseCommand(command);
   const action = parts[1];
   const handlers = ACTION_HANDLERS[type];
   const handler = handlers?.[action];
