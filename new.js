@@ -228,6 +228,24 @@ function sleep(duration) {
   });
 }
 
+async function getTheme() {
+  const prefersLightScheme = window.matchMedia(
+    "(prefers-color-scheme: light)",
+  ).matches;
+
+  const currentTheme = await getStorage("preferences");
+
+  if (!currentTheme?.theme && prefersLightScheme) return "light";
+  return currentTheme?.theme ?? "dark";
+}
+
+async function initTheme() {
+  const theme = await getTheme();
+  if (theme === "light") {
+    document.documentElement.setAttribute("data-theme", "light");
+  }
+}
+
 /* ==========================================================================
    5. CANVAS SETUP
    ========================================================================== */
@@ -347,7 +365,7 @@ class Particle {
     this.z = clamp(this.z, CONFIG.network.depth.min, CONFIG.network.depth.max);
   }
 
-  draw() {
+  draw(theme) {
     if (!ctx) {
       return;
     }
@@ -359,7 +377,12 @@ class Particle {
 
     ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
 
-    ctx.fillStyle = `rgba(0, 246, 255, ${opacity})`;
+    // ctx.fillStyle = `rgba(0, 246, 255, ${opacity})`; // cyan
+    // ctx.fillStyle = `rgba(155, 92, 255, ${opacity})`; // violet
+    ctx.fillStyle =
+      theme === "light"
+        ? `rgba(80, 80, 80, ${opacity})`
+        : `rgba(0, 246, 255, ${opacity})`;
 
     ctx.fill();
   }
@@ -389,7 +412,7 @@ function createParticles() {
    8. NETWORK CONNECTIONS
    ========================================================================== */
 
-function drawConnections() {
+function drawConnections(theme) {
   if (!ctx) {
     return;
   }
@@ -416,7 +439,12 @@ function drawConnections() {
       ctx.beginPath();
       ctx.moveTo(particleA.x, particleA.y);
       ctx.lineTo(particleB.x, particleB.y);
-      ctx.strokeStyle = `rgba(0, 180, 220, ${alpha})`;
+      // ctx.strokeStyle = `rgba(0, 180, 220, ${alpha})`; // cyan
+      // ctx.strokeStyle = `rgba(135, 60, 235, ${alpha})`; // violet
+      ctx.strokeStyle =
+        theme === "light"
+          ? `rgba(50, 50, 50, ${alpha})`
+          : `rgba(0, 180, 220, ${alpha})`;
       ctx.lineWidth = 0.8 * depth;
       ctx.stroke();
     }
@@ -427,7 +455,7 @@ function drawConnections() {
    9. MOUSE CONNECTIONS
    ========================================================================== */
 
-function drawMouseConnections() {
+function drawMouseConnections(theme) {
   if (!ctx || !state.mouse.active) {
     return;
   }
@@ -448,7 +476,12 @@ function drawMouseConnections() {
     ctx.beginPath();
     ctx.moveTo(particle.x, particle.y);
     ctx.lineTo(state.mouse.x, state.mouse.y);
-    ctx.strokeStyle = `rgba(0, 246, 255, ${strength * 0.22})`;
+    // ctx.strokeStyle = `rgba(0, 246, 255, ${strength * 0.22})`; // cyan
+    // ctx.strokeStyle = `rgba(155, 92, 255, ${strength * 0.22})`; // violet
+    ctx.strokeStyle =
+      theme === "light"
+        ? `rgba(80, 80, 80, ${strength * 0.22})`
+        : `rgba(0, 246, 255, ${strength * 0.22})`;
     ctx.lineWidth = 0.5;
     ctx.stroke();
   }
@@ -458,12 +491,13 @@ function drawMouseConnections() {
    10. BACKGROUND
    ========================================================================== */
 
-function drawBackground() {
+async function drawBackground() {
   if (!ctx) {
     return;
   }
 
   const { width, height } = state.viewport;
+  const theme = await getTheme();
 
   ctx.clearRect(0, 0, width, height);
 
@@ -476,20 +510,29 @@ function drawBackground() {
     Math.max(width, height) * 0.75,
   );
 
-  gradient.addColorStop(0, "rgba(8, 20, 35, 0.12)");
+  // violet
+  // gradient.addColorStop(0, "rgba(25, 10, 45, 0.12)");
+  // gradient.addColorStop(1, "rgba(3, 5, 11, 0)");
 
-  gradient.addColorStop(1, "rgba(3, 5, 11, 0)");
+  // gray
+  if (theme === "light") {
+    gradient.addColorStop(0, "rgba(20, 20, 20, 0.12)");
+    gradient.addColorStop(1, "rgba(5, 5, 5, 0)");
+  } else {
+    // cyan
+    gradient.addColorStop(0, "rgba(8, 20, 35, 0.12)");
+    gradient.addColorStop(1, "rgba(3, 5, 11, 0)");
+  }
 
   ctx.fillStyle = gradient;
-
   ctx.fillRect(0, 0, width, height);
 
-  drawConnections();
-  drawMouseConnections();
+  drawConnections(theme);
+  drawMouseConnections(theme);
 
   for (const particle of state.particles) {
     particle.update();
-    particle.draw();
+    particle.draw(theme);
   }
 }
 
@@ -497,8 +540,8 @@ function drawBackground() {
    11. ANIMATION
    ========================================================================== */
 
-function animateBackground() {
-  drawBackground();
+async function animateBackground() {
+  await drawBackground();
 
   state.animationFrame = requestAnimationFrame(animateBackground);
 }
@@ -858,6 +901,37 @@ const ACTION_HANDLERS = {
       await handleResourceRemove(command, parts, "navigation");
     },
   },
+
+  theme: {
+    ls: async (command) => {
+      const currentTheme = await getTheme();
+
+      const output = ["dark", "light"]
+        .map(
+          (item) => `
+          <div class="info-output">
+            <span class="info-command">
+              - ${item} 
+            </span>
+            ${item === currentTheme ? '<span class="info-muted">(current)</span>' : ""}
+          </div>
+        `,
+        )
+        .join("");
+
+      showInfo(`
+    <div class="info-output">
+      <span class="info-muted">$</span>
+      ${command}
+    </div>
+
+    ${output}
+  `);
+    },
+    switch: async (command, parts) => {
+      await handleSwitchTheme(command, parts);
+    },
+  },
 };
 
 /* ==========================================================================
@@ -928,6 +1002,20 @@ async function handleResourceRemove(command, parts, type) {
   const result = await updateResource(type, "remove", data);
 
   showCommandResult(command, result);
+}
+
+async function handleSwitchTheme(command, parts) {
+  if (!["dark", "light"].includes(parts[2])) {
+    showCommandError(
+      command,
+      "Please enter the right theme bro. Run /config to get the detail.",
+    );
+  }
+
+  await setStorage("preferences", { theme: parts[2] });
+  document.documentElement.setAttribute("data-theme", parts[2]);
+
+  showCommandResult(command, `Theme switched to ${parts[2]}`);
 }
 
 /* ==========================================================================
@@ -1024,6 +1112,27 @@ function showHelp() {
         - Remove a navigation
       </span>
     </div>
+    <div class="info-output">
+      THEME
+    </div>
+
+    <div class="info-output">
+      <span class="info-command">
+        thm ls
+      </span>
+      <span class="info-muted">
+        - List all themes
+      </span>
+    </div>
+
+    <div class="info-output">
+      <span class="info-command">
+        thm switch &lt;name&gt;
+      </span>
+      <span class="info-muted">
+        - Switch theme
+      </span>
+    </div>
   `);
 }
 
@@ -1064,6 +1173,18 @@ async function performSearch(value) {
    */
   if (query.startsWith("cmd")) {
     await dispatchAction(query, "commands");
+
+    searchInput.value = "";
+    suggestionInput.value = "";
+
+    return;
+  }
+
+  /*
+   * Theme management.
+   */
+  if (query.startsWith("thm")) {
+    await dispatchAction(query, "theme");
 
     searchInput.value = "";
     suggestionInput.value = "";
@@ -1293,7 +1414,7 @@ function initializeWindowEvents() {
     passive: true,
   });
 
-  document.addEventListener("visibilitychange", () => {
+  document.addEventListener("visibilitychange", async () => {
     if (document.hidden) {
       if (state.animationFrame) {
         cancelAnimationFrame(state.animationFrame);
@@ -1305,7 +1426,7 @@ function initializeWindowEvents() {
     }
 
     if (!state.animationFrame) {
-      animateBackground();
+      await animateBackground();
     }
   });
 }
@@ -1334,6 +1455,7 @@ function initializeNetwork() {
 }
 
 async function initialize() {
+  await initTheme();
   await initPrank();
   initializeClock();
   initializeNetwork();
