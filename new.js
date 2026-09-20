@@ -184,6 +184,37 @@ const CONFIG = {
   searchHistoryLimit: 20,
 };
 
+const THEME_COLORS = {
+  cyberpunk: {
+    particle: "0, 246, 255" /* Cyan */,
+    connection: "0, 180, 220",
+    mouse: "0, 246, 255",
+    gradientStart: "rgba(8, 20, 35, 0.12)",
+    gradientEnd: "rgba(3, 5, 11, 0)",
+  },
+  smoke: {
+    particle: "48, 48, 48" /* Silver */,
+    connection: "95, 95, 95" /* Chrome */,
+    mouse: "37, 37, 37" /* Graphite */,
+    gradientStart: "rgba(212, 212, 208, 0.25)",
+    gradientEnd: "rgba(247, 247, 245, 0)",
+  },
+  infrared: {
+    particle: "255, 48, 79" /* Infrared */,
+    connection: "255, 107, 53" /* Ember */,
+    mouse: "255, 23, 68" /* Red */,
+    gradientStart: "rgba(255, 48, 79, 0.15)",
+    gradientEnd: "rgba(5, 5, 5, 0)",
+  },
+  ultraviolet: {
+    particle: "124, 58, 237" /* Ultraviolet */,
+    connection: "168, 85, 247" /* Electric Purple */,
+    mouse: "99, 102, 241" /* Blue Light */,
+    gradientStart: "rgba(124, 58, 237, 0.15)",
+    gradientEnd: "rgba(250, 249, 255, 0)",
+  },
+};
+
 /* ==========================================================================
    3. GLOBAL STATE
    ========================================================================== */
@@ -232,18 +263,15 @@ async function getTheme() {
   const prefersLightScheme = window.matchMedia(
     "(prefers-color-scheme: light)",
   ).matches;
-
   const currentTheme = await getStorage("preferences");
 
-  if (!currentTheme?.theme && prefersLightScheme) return "light";
-  return currentTheme?.theme ?? "dark";
+  if (!currentTheme?.theme && prefersLightScheme) return "smoke";
+  return currentTheme?.theme ?? "cyberpunk";
 }
 
 async function initTheme() {
   const theme = await getTheme();
-  if (theme === "light") {
-    document.documentElement.setAttribute("data-theme", "light");
-  }
+  document.documentElement.setAttribute("data-theme", theme);
 }
 
 /* ==========================================================================
@@ -366,24 +394,15 @@ class Particle {
   }
 
   draw(theme) {
-    if (!ctx) {
-      return;
-    }
-
+    if (!ctx) return;
     const radius = this.radius * this.z;
     const opacity = this.opacity * this.z;
 
+    const colors = THEME_COLORS[theme] || THEME_COLORS["cyberpunk"];
+
     ctx.beginPath();
-
     ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
-
-    // ctx.fillStyle = `rgba(0, 246, 255, ${opacity})`; // cyan
-    // ctx.fillStyle = `rgba(155, 92, 255, ${opacity})`; // violet
-    ctx.fillStyle =
-      theme === "light"
-        ? `rgba(80, 80, 80, ${opacity})`
-        : `rgba(0, 246, 255, ${opacity})`;
-
+    ctx.fillStyle = `rgba(${colors.particle}, ${opacity})`;
     ctx.fill();
   }
 }
@@ -435,16 +454,12 @@ function drawConnections(theme) {
       const strength = 1 - distance / maxDistance;
       const depth = (particleA.z + particleB.z) / 2;
       const alpha = strength * depth;
+      const colors = THEME_COLORS[theme] || THEME_COLORS["cyberpunk"];
 
       ctx.beginPath();
       ctx.moveTo(particleA.x, particleA.y);
       ctx.lineTo(particleB.x, particleB.y);
-      // ctx.strokeStyle = `rgba(0, 180, 220, ${alpha})`; // cyan
-      // ctx.strokeStyle = `rgba(135, 60, 235, ${alpha})`; // violet
-      ctx.strokeStyle =
-        theme === "light"
-          ? `rgba(50, 50, 50, ${alpha})`
-          : `rgba(0, 180, 220, ${alpha})`;
+      ctx.strokeStyle = `rgba(${colors.connection}, ${alpha})`;
       ctx.lineWidth = 0.8 * depth;
       ctx.stroke();
     }
@@ -472,16 +487,12 @@ function drawMouseConnections(theme) {
     }
 
     const strength = 3 - distance / maxDistance;
+    const colors = THEME_COLORS[theme] || THEME_COLORS["cyberpunk"];
 
     ctx.beginPath();
     ctx.moveTo(particle.x, particle.y);
     ctx.lineTo(state.mouse.x, state.mouse.y);
-    // ctx.strokeStyle = `rgba(0, 246, 255, ${strength * 0.22})`; // cyan
-    // ctx.strokeStyle = `rgba(155, 92, 255, ${strength * 0.22})`; // violet
-    ctx.strokeStyle =
-      theme === "light"
-        ? `rgba(80, 80, 80, ${strength * 0.22})`
-        : `rgba(0, 246, 255, ${strength * 0.22})`;
+    ctx.strokeStyle = `rgba(${colors.mouse}, ${strength * 0.22})`;
     ctx.lineWidth = 0.5;
     ctx.stroke();
   }
@@ -492,12 +503,10 @@ function drawMouseConnections(theme) {
    ========================================================================== */
 
 async function drawBackground() {
-  if (!ctx) {
-    return;
-  }
-
+  if (!ctx) return;
   const { width, height } = state.viewport;
   const theme = await getTheme();
+  const colors = THEME_COLORS[theme] || THEME_COLORS["cyberpunk"];
 
   ctx.clearRect(0, 0, width, height);
 
@@ -510,19 +519,8 @@ async function drawBackground() {
     Math.max(width, height) * 0.75,
   );
 
-  // violet
-  // gradient.addColorStop(0, "rgba(25, 10, 45, 0.12)");
-  // gradient.addColorStop(1, "rgba(3, 5, 11, 0)");
-
-  // gray
-  if (theme === "light") {
-    gradient.addColorStop(0, "rgba(20, 20, 20, 0.12)");
-    gradient.addColorStop(1, "rgba(5, 5, 5, 0)");
-  } else {
-    // cyan
-    gradient.addColorStop(0, "rgba(8, 20, 35, 0.12)");
-    gradient.addColorStop(1, "rgba(3, 5, 11, 0)");
-  }
+  gradient.addColorStop(0, colors.gradientStart);
+  gradient.addColorStop(1, colors.gradientEnd);
 
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, width, height);
@@ -908,14 +906,13 @@ const ACTION_HANDLERS = {
   theme: {
     ls: async (command) => {
       const currentTheme = await getTheme();
+      const themes = ["cyberpunk", "smoke", "infrared", "ultraviolet"];
 
-      const output = ["dark", "light"]
+      const output = themes
         .map(
           (item) => `
           <div class="info-output">
-            <span class="info-command">
-              - ${item} 
-            </span>
+            <span class="info-command">- ${item}</span>
             ${item === currentTheme ? '<span class="info-muted">(current)</span>' : ""}
           </div>
         `,
@@ -923,15 +920,19 @@ const ACTION_HANDLERS = {
         .join("");
 
       showInfo(`
-    <div class="info-output">
-      <span class="info-muted">$</span>
-      ${command}
-    </div>
-
-    ${output}
-  `);
+        <div class="info-output"><span class="info-muted">$</span> ${command}</div>
+        ${output}
+      `);
     },
     switch: async (command, parts) => {
+      const themes = ["cyberpunk", "smoke", "infrared", "ultraviolet"];
+      if (!themes.includes(parts[2])) {
+        showCommandError(
+          command,
+          "Invalid theme. Available: default, smoke, infrared, ultraviolet.",
+        );
+        return;
+      }
       await handleSwitchTheme(command, parts);
     },
   },
@@ -1008,7 +1009,7 @@ async function handleResourceRemove(command, parts, type) {
 }
 
 async function handleSwitchTheme(command, parts) {
-  if (!["dark", "light"].includes(parts[2])) {
+  if (!["cyberpunk", "smoke", "infrared", "ultraviolet"].includes(parts[2])) {
     showCommandError(
       command,
       "Please enter the right theme bro. Run /config to get the detail.",
@@ -1016,7 +1017,12 @@ async function handleSwitchTheme(command, parts) {
   }
 
   await setStorage("preferences", { theme: parts[2] });
-  document.documentElement.setAttribute("data-theme", parts[2]);
+
+  if (parts[2] !== "cyberpunk") {
+    document.documentElement.setAttribute("data-theme", parts[2]);
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+  }
 
   showCommandResult(command, `Theme switched to ${parts[2]}`);
 }
@@ -1346,19 +1352,19 @@ function initializeSearch() {
     if (event.ctrlKey || event.metaKey || event.altKey) return;
 
     // Jika kursor sedang BUKAN berada di searchInput
-    if (document.activeElement !== searchInput) {
-      // Tombol dengan length === 1 memastikan hanya huruf/angka/simbol yang ditangkap
-      // dan mengabaikan tombol kontrol seperti 'Shift', 'Enter', 'Tab', 'Escape'
-      if (event.key.length === 1) {
-        searchInput.focus();
-      }
+    // if (document.activeElement !== searchInput) {
+    //   // Tombol dengan length === 1 memastikan hanya huruf/angka/simbol yang ditangkap
+    //   // dan mengabaikan tombol kontrol seperti 'Shift', 'Enter', 'Tab', 'Escape'
+    //   if (event.key.length === 1) {
+    //     searchInput.focus();
+    //   }
+    // }
+    if (event.key === "/" && document.activeElement !== searchInput) {
+      event.preventDefault();
+      searchInput.focus();
     }
   });
 }
-// if (event.key === "/" && document.activeElement !== searchInput) {
-//   event.preventDefault();
-//   searchInput.focus();
-// }
 
 /* ==========================================================================
    28. TERMINAL TYPING

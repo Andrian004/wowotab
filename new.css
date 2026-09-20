@@ -72,62 +72,157 @@
   --code-bg: #080b12;
 }
 
-/* Tema Terang (Light Mode) */
-[data-theme="light"] {
-  --bg-primary: #ffffff; /* Abu-abu sangat muda */
-  --bg-secondary: #e2e8f0; /* Abu-abu sedikit lebih gelap untuk panel */
-  --cyan: #0496a9; /* Cyan digelapkan agar terbaca di background putih */
-  --cyan-soft: rgba(0, 143, 163, 0.3);
-  --purple: #7026d9; /* Ungu digelapkan */
-  --purple-soft: rgba(112, 38, 217, 0.2);
-  --green: #059669;
-  --orange: #d97706;
-  --text-primary: #4c5454; /* Teks utama menjadi gelap */
-  --text-secondary: #475569;
-  --border: rgba(0, 0, 0, 0.15);
-  --border-bright: rgba(0, 143, 163, 0.4);
-  --panel: rgba(255, 255, 255, 0.85);
+/* ==========================================================================
+   TEMA 1: White Smoke - "Synthetic Future" (Light)
+   Material putih, smoke, chrome, dan void. No neon.
+   ========================================================================== */
+[data-theme="smoke"] {
+  --bg-primary: #f7f7f5; /* White */
+  --bg-secondary: #e8e8e6; /* Smoke */
+  --cyan: #a6a6a2; /* Silver */
+  --cyan-soft: rgba(166, 166, 162, 0.4);
+  --purple: #d4d4d0; /* Chrome */
+  --purple-soft: rgba(212, 212, 208, 0.4);
+  --text-primary: #050505; /* Void Black */
+  --text-secondary: #252525; /* Graphite */
+  --border: rgba(37, 37, 37, 0.15);
+  --border-bright: rgba(37, 37, 37, 0.35);
+  --panel: rgba(232, 232, 230, 0.75);
 
-  /* Efek Neon (dibuat lebih redup agar tidak menyilaukan di light mode) */
-  --neon-cyan: #00aaff;
-  --neon-cyan-dim: rgba(2, 132, 199, 0.15);
-  --neon-purple: rgb(218, 68, 255);
-  --neon-purple-dim: rgba(126, 34, 206, 0.15);
+  --neon-cyan: #252525; /* Diganti Graphite karena no neon */
+  --neon-cyan-dim: rgba(37, 37, 37, 0.15);
+  --neon-purple: #050505; /* Diganti Void Black */
+  --neon-purple-dim: rgba(5, 5, 5, 0.15);
 
-  --dark-bg: #ffffff; /* Tetap bernama dark-bg untuk kompatibilitas, tapi bernilai putih */
-  --panel-bg: rgba(255, 255, 255, 0.7);
-  --text-main: #1e293b;
-  --text-muted: #64748b;
+  --dark-bg: #f7f7f5;
+  --panel-bg: rgba(247, 247, 245, 0.7);
+  --text-main: #050505;
+  --text-muted: #a6a6a2; /* Silver */
 
-  /* Variabel tambahan untuk Gradient */
-  --bg-gradient-center: rgba(226, 232, 240, 0.8);
-  --bg-wrapper-center: rgba(255, 255, 255, 0.5);
-  --bg-wrapper-edge: rgba(240, 244, 248, 0.95);
-  --search-text: #0f172a;
-  --search-placeholder: rgba(15, 23, 42, 0.4);
+  --bg-gradient-center: rgba(212, 212, 208, 0.3);
+  --bg-wrapper-center: rgba(232, 232, 230, 0.7);
+  --bg-wrapper-edge: rgba(247, 247, 245, 0.95);
+  --search-text: #050505;
+  --search-placeholder: rgba(5, 5, 5, 0.4);
 
-  /* Efek Visual (Dibuat gelap transparan agar terlihat di background terang) */
-  --scanline-color: rgba(213, 88, 255, 0.05);
-  --vignette-color: rgba(126, 127, 127, 0.15);
+  --scanline-color: rgba(5, 5, 5, 0.05);
+  --vignette-color: rgba(5, 5, 5, 0.05);
+  --label-bg: rgba(37, 37, 37, 0.08);
 
-  /* label */
-  --label-bg: rgba(78, 195, 174, 0.1);
+  --scroll-thumb: #d4d4d0; /* Chrome */
+  --cli-text: #252525; /* Graphite */
+  --cli-command: #050505; /* Void Black */
+  --cli-muted: rgba(37, 37, 37, 0.5);
 
-  /* CLI & Scrollbar */
-  --scroll-thumb: #cbd5e1;
-  --cli-text: #0f172a;
-  --cli-command: #0284c7;
-  --cli-muted: rgba(15, 23, 42, 0.45);
+  --card-bg: rgba(232, 232, 230, 0.6);
+  --card-bg-hover: rgba(212, 212, 208, 0.8);
+  --card-accent: #050505;
 
-  /* Cyber Cards */
-  --card-bg: rgba(255, 255, 255, 0.5);
-  --card-bg-hover: rgba(255, 255, 255, 0.95);
-  --card-accent: #0284c7;
+  --modal-overlay: rgba(247, 247, 245, 0.96);
+  --modal-panel: rgba(232, 232, 230, 0.95);
+  --code-bg: #d4d4d0;
+}
 
-  /* Modals & Docs (Secret Area) */
-  --modal-overlay: rgba(240, 244, 248, 0.97);
-  --modal-panel: rgba(255, 255, 255, 0.95);
-  --code-bg: #e2e8f0;
+/* ==========================================================================
+   TEMA 2: Infrared - "Machine Vision" (Dark)
+   The machine is watching.
+   ========================================================================== */
+[data-theme="infrared"] {
+  --bg-primary: #050505; /* Obsidian */
+  --bg-secondary: #090909; /* Black */
+  --cyan: #ff304f; /* Infrared */
+  --cyan-soft: rgba(255, 48, 79, 0.3);
+  --purple: #ff6b35; /* Ember */
+  --purple-soft: rgba(255, 107, 53, 0.3);
+  --text-primary: #f5f5f5; /* Text */
+  --text-secondary: #777777; /* Muted */
+  --border: rgba(255, 48, 79, 0.2);
+  --border-bright: rgba(255, 48, 79, 0.45);
+  --panel: rgba(26, 26, 26, 0.75); /* Smoke */
+
+  --neon-cyan: #ff6b35;
+  --neon-cyan-dim: rgba(255, 48, 79, 0.2);
+  --neon-purple: #ff1744; /* Red */
+  --neon-purple-dim: rgba(255, 23, 68, 0.2);
+
+  --dark-bg: #050505;
+  --panel-bg: rgba(9, 9, 9, 0.8);
+  --text-main: #f5f5f5;
+  --text-muted: #777777;
+
+  --bg-gradient-center: rgba(255, 23, 68, 0.15);
+  --bg-wrapper-center: rgba(255, 48, 79, 0.08);
+  --bg-wrapper-edge: rgba(5, 5, 5, 0.98);
+  --search-text: #f5f5f5;
+  --search-placeholder: rgba(245, 245, 245, 0.3);
+
+  --scanline-color: rgba(255, 48, 79, 0.08);
+  --vignette-color: rgba(5, 5, 5, 0.7);
+  --label-bg: rgba(255, 48, 79, 0.15);
+
+  --scroll-thumb: #1a1a1a;
+  --cli-text: #ff6b35;
+  --cli-command: #ff304f;
+  --cli-muted: rgba(119, 119, 119, 0.6);
+
+  --card-bg: rgba(9, 9, 9, 0.6);
+  --card-bg-hover: rgba(26, 26, 26, 0.9);
+  --card-accent: #ff304f;
+
+  --modal-overlay: rgba(5, 5, 5, 0.98);
+  --modal-panel: rgba(26, 26, 26, 0.95);
+  --code-bg: #090909;
+}
+
+/* ==========================================================================
+   TEMA 3: Ultraviolet - "Deep Space" (Light)
+   Cahaya hologram violet. Beyond the interface.
+   ========================================================================== */
+[data-theme="ultraviolet"] {
+  --bg-primary: #faf9ff; /* White */
+  --bg-secondary: #f3f1ff; /* Starlight */
+  --cyan: #7c3aed; /* Ultraviolet */
+  --cyan-soft: rgba(124, 58, 237, 0.3);
+  --purple: #a855f7; /* Electric Purple */
+  --purple-soft: rgba(168, 85, 247, 0.3);
+  --text-primary: #17131f; /* Text */
+  --text-secondary: #777080; /* Muted */
+  --border: rgba(124, 58, 237, 0.15);
+  --border-bright: rgba(124, 58, 237, 0.35);
+  --panel: rgba(243, 241, 255, 0.85);
+
+  --neon-cyan: #6366f1; /* Blue Light */
+  --neon-cyan-dim: rgba(99, 102, 241, 0.15);
+  --neon-purple: #ec4899; /* Pink Light */
+  --neon-purple-dim: rgba(236, 72, 153, 0.15);
+
+  --dark-bg: #faf9ff;
+  --panel-bg: rgba(250, 249, 255, 0.7);
+  --text-main: #17131f;
+  --text-muted: #777080;
+
+  --bg-gradient-center: rgba(124, 58, 237, 0.15);
+  --bg-wrapper-center: rgba(243, 241, 255, 0.6);
+  --bg-wrapper-edge: rgba(250, 249, 255, 0.95);
+  --search-text: #17131f;
+  --search-placeholder: rgba(23, 19, 31, 0.4);
+
+  --scanline-color: rgba(124, 58, 237, 0.05);
+  --vignette-color: rgba(23, 19, 31, 0.08);
+  --label-bg: rgba(124, 58, 237, 0.1);
+
+  --scroll-thumb: #d4d4d0;
+  --cli-text: #6366f1;
+  --cli-command: #7c3aed;
+  --cli-muted: rgba(119, 112, 128, 0.5);
+
+  --card-bg: rgba(243, 241, 255, 0.6);
+  --card-bg-hover: rgba(250, 249, 255, 0.95);
+  --card-accent: #7c3aed;
+
+  --modal-overlay: rgba(250, 249, 255, 0.97);
+  --modal-panel: rgba(243, 241, 255, 0.95);
+  --code-bg: #eae6ff;
 }
 
 *,
