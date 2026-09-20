@@ -795,6 +795,9 @@ async function updateResource(type, action, data) {
 
   switch (action) {
     case "add":
+      if (type === "navigation" && resources.length > 6) {
+        return "Yo, max 7 navigations. You're already full 💀";
+      }
       return addResource(config, resources, data);
 
     case "remove":
@@ -1197,6 +1200,7 @@ async function performSearch(value) {
    */
   if (query.startsWith("nav")) {
     await dispatchAction(query, "navigation");
+    await initializeCards();
 
     searchInput.value = "";
     suggestionInput.value = "";
@@ -1241,8 +1245,16 @@ async function performSearch(value) {
 /* ==========================================================================
    26. SEARCH SUGGESTIONS
    ========================================================================== */
+let historyIndex = -1;
+let typedBuffer = "";
+let loadedHistory = [];
 
 async function handleInput(event) {
+  if (event.isTrusted) {
+    historyIndex = -1;
+    typedBuffer = searchInput.value;
+  }
+
   const value = event.target.value;
 
   if (!value) {
@@ -1262,14 +1274,41 @@ async function handleInput(event) {
   suggestionInput.value = match ? value + match.slice(value.length) : "";
 }
 
-function handleSearchKeydown(event) {
+async function handleSearchKeydown(event) {
   if (event.key === "Tab") {
     if (suggestionInput.value && suggestionInput.value !== searchInput.value) {
       event.preventDefault();
-
       searchInput.value = suggestionInput.value;
+
+      typedBuffer = searchInput.value;
+      historyIndex = -1;
+    }
+    return;
+  }
+
+  if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+    event.preventDefault();
+
+    loadedHistory = await getSearchHistory();
+
+    if (loadedHistory.length === 0) return;
+
+    if (event.key === "ArrowUp") {
+      if (historyIndex < loadedHistory.length - 1) {
+        historyIndex++;
+        searchInput.value = loadedHistory[historyIndex];
+      }
+    } else if (event.key === "ArrowDown") {
+      if (historyIndex > 0) {
+        historyIndex--;
+        searchInput.value = loadedHistory[historyIndex];
+      } else if (historyIndex === 0) {
+        historyIndex = -1;
+        searchInput.value = typedBuffer;
+      }
     }
 
+    searchInput.dispatchEvent(new Event("input"));
     return;
   }
 
@@ -1278,6 +1317,9 @@ function handleSearchKeydown(event) {
   }
 
   event.preventDefault();
+
+  historyIndex = -1;
+  typedBuffer = "";
 
   performSearch(searchInput.value);
 }
@@ -1292,19 +1334,31 @@ function initializeSearch() {
   }
 
   searchInput.addEventListener("keydown", handleSearchKeydown);
-
   searchInput.addEventListener("input", handleInput);
 
   /*
    * "/" acts as a shortcut to focus search.
    */
+
+  searchInput.focus();
+
   document.addEventListener("keydown", (event) => {
-    if (event.key === "/" && document.activeElement !== searchInput) {
-      event.preventDefault();
-      searchInput.focus();
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+    // Jika kursor sedang BUKAN berada di searchInput
+    if (document.activeElement !== searchInput) {
+      // Tombol dengan length === 1 memastikan hanya huruf/angka/simbol yang ditangkap
+      // dan mengabaikan tombol kontrol seperti 'Shift', 'Enter', 'Tab', 'Escape'
+      if (event.key.length === 1) {
+        searchInput.focus();
+      }
     }
   });
 }
+// if (event.key === "/" && document.activeElement !== searchInput) {
+//   event.preventDefault();
+//   searchInput.focus();
+// }
 
 /* ==========================================================================
    28. TERMINAL TYPING
